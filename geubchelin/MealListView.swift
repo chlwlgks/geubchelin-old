@@ -18,8 +18,8 @@ struct MealListView<Content: View>: View {
     
     var body: some View {
         VStack {
-            ForEach(meals) { meal in
-                if let dishes = meal.menu {
+            ForEach(meals, id: \.mealCode) { meal in
+                if let dishes = meal.menus {
                     VStack(alignment: .leading) {
                         HStack {
                             Text(meal.mealType)

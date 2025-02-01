@@ -30,7 +30,7 @@ struct MealPlanView: View {
 //                            MealListView(meals: viewModel.meals) { dishes in
                             MealListView(meals: Meal.sampleMeals) { dishes in
                                 let dishTexts = dishes.enumerated().compactMap { (index, dish) -> Text in
-                                    let hasAllergy = dish.allergies.contains(where: { allergyViewModel.selectedAllergies.contains($0) })
+                                    let hasAllergy = dish.allergies?.contains(where: { allergyViewModel.selectedAllergies.contains($0) }) ?? false
                                     let baseText = Text(dish.name)
                                         .foregroundStyle(hasAllergy ? .red : .primary)
                                     return index < dishes.count - 1 ? baseText + Text(", ") : baseText
@@ -40,10 +40,14 @@ struct MealPlanView: View {
                             }
                         }
                         .buttonStyle(.plain)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(.secondary.opacity(0.15))
-                        )
+                        Button {
+                            print("dd")
+                        } label: {
+                            Text("자세히 보기")
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding(.bottom)
                     }
                     .padding(.horizontal)
                 }

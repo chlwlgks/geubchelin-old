@@ -16,9 +16,9 @@ class FetchMeals {
     
     func fetchMeals(date: Date) async -> [Meal] {
         var meals: [Meal] = [
-            Meal(id: "1", mealType: "조식"),
-            Meal(id: "2", mealType: "중식"),
-            Meal(id: "3", mealType: "석식")
+            Meal(mealCode: "1", mealType: "조식"),
+            Meal(mealCode: "2", mealType: "중식"),
+            Meal(mealCode: "3", mealType: "석식")
         ]
         
         let dateFormatter = DateFormatter()
@@ -37,8 +37,8 @@ class FetchMeals {
             
             let rows = response.mealServiceDietInfo[1].row!
             for row in rows {
-                if let index = meals.firstIndex(where: { $0.id == row.MMEAL_SC_CODE }) {
-                    meals[index].menu = parseMeals(meal: row.DDISH_NM)
+                if let index = meals.firstIndex(where: { $0.mealCode == row.MMEAL_SC_CODE }) {
+                    meals[index].menus = parseMeals(meal: row.DDISH_NM)
                     meals[index].calorieInfo = row.CAL_INFO
                 }
             }
@@ -58,7 +58,7 @@ class FetchMeals {
         }
         for line in lines {
             var name = line
-            var allergies: [String] = []
+            var allergies: [String]?
             
             if let openParenIndex = line.lastIndex(of: "("), let closeParenIndex = line.lastIndex(of: ")") {
                 let insideParen = String(line[line.index(after: openParenIndex)...line.index(before: closeParenIndex)])
