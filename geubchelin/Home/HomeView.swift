@@ -28,7 +28,6 @@ struct HomeView: View {
                 .padding(.top)
                 .padding(.top)
                 
-                
                 if false {
                     //                    if viewModel.meals.allSatisfy({ $0.menu == nil }) {
                     Spacer()
@@ -39,12 +38,12 @@ struct HomeView: View {
                     List(Meal.sampleMeals, id: \.mealCode) { meal in
                         if let menus = meal.menus {
                             VStack(alignment: .leading) {
-                                HStack {
+                                HStack(alignment:.center) {
                                     Text(meal.mealType)
-                                        .font(.system(.title3, weight: .bold))
+                                        .font(.system(.title3, weight: .semibold))
                                     Spacer()
                                     Text(meal.calorieInfo ?? "")
-                                        .font(.headline)
+                                        .font(.system(.callout, weight: .semibold))
                                         .foregroundStyle(.gray)
                                 }
                                 ForEach(menus, id: \.self) { menu in

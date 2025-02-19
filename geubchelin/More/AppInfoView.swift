@@ -27,6 +27,8 @@ struct AppInfoView: View {
                 .font(.callout)
             Spacer()
         }
+        .navigationTitle("앱 정보")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

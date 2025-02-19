@@ -52,6 +52,7 @@ struct UserInfoInputView: View {
             .buttonStyle(.borderedProminent)
             .sensoryFeedback(.success, trigger: showOnboardingView)
             .padding()
+            .padding(.bottom)
         }
         .navigationTitle("프로필 설정")
     }
