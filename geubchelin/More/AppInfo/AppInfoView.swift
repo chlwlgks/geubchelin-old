@@ -12,7 +12,7 @@ struct AppInfoView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            Image("geubchelin")
+            Image(uiImage: UIImage(named: "AppIcon60x60")!)
                 .resizable()
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))

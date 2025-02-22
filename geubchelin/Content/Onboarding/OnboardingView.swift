@@ -66,7 +66,7 @@ struct OnboardingView: View {
             
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.system(.title3, weight: .semibold))
+                    .fontWeight(.semibold)
                 Text(description)
                     .font(.subheadline)
                     .foregroundStyle(.gray)

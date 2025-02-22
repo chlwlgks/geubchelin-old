@@ -11,7 +11,7 @@ struct MoreView: View {
     @AppStorage("schoolName") private var schoolName: String?
     @AppStorage("showOnboardingView") private var showOnboardingView = true
     
-    @State private var isShowingPrivacyPolicyView: Bool = false
+    @State private var isShowingFeedbackShareOptions = false
     
     var body: some View {
         NavigationStack {
@@ -30,7 +30,6 @@ struct MoreView: View {
                             }
                         }
                     }
-
                 }
                 Section {
                     NavigationLink {
@@ -41,17 +40,31 @@ struct MoreView: View {
                 }
                 Section {
                     Button {
-                        UIApplication.shared.open(URL(string: "https://www.instagram.com/j1hxna/")!)
+                        if MailComposeViewController.canSendMail {
+                            isShowingFeedbackShareOptions = true
+                        } else {
+                            UIApplication.shared.open(URL(string: "https://www.instagram.com/j1hxna/")!)
+                        }
                     } label: {
-                        Text("개발자에게 문의하기")
+                        Text("피드백 공유")
                     }
-                    
-                    Button {
-                        isShowingPrivacyPolicyView = true
-                    } label: {
-                        Text("개인정보 처리방침")
-                    }
-                    
+                    .confirmationDialog(
+                        "피드백 공유 방법",
+                        isPresented: $isShowingFeedbackShareOptions,
+                        titleVisibility: .visible,
+                        actions: {
+                            Button {
+                                UIApplication.shared.open(URL(string: "https://www.instagram.com/j1hxna/")!)
+                            } label: {
+                                Text("Instagram")
+                            }
+                            Button {
+                                MailComposeViewController.shared.sendEmail()
+                            } label: {
+                                Text("Mail")
+                            }
+                        }
+                    )
                     NavigationLink {
                         AppInfoView()
                     } label: {
@@ -61,9 +74,6 @@ struct MoreView: View {
             }
             .scrollDisabled(true)
             .navigationTitle("더보기")
-            .sheet(isPresented: $isShowingPrivacyPolicyView) {
-                PrivacyPolicyView()
-            }
         }
     }
 }

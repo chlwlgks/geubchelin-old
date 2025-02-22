@@ -17,6 +17,11 @@ struct MealPlanView: View {
                 DatePicker("날짜", selection: $viewModel.selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
                     .padding(.horizontal)
+                    .onChange(of: viewModel.selectedDate) {
+                        Task {
+                            await viewModel.fetchMeals()
+                        }
+                    }
                 if false {
 //                if viewModel.meals.allSatisfy({ $0.menu == nil }) {
                     Spacer()
@@ -59,11 +64,6 @@ struct MealPlanView: View {
                     await viewModel.fetchMeals()
                 }
                 allergyViewModel = AllergySelectionViewModel()
-            }
-            .onChange(of: viewModel.selectedDate) {
-                Task {
-                    await viewModel.fetchMeals()
-                }
             }
         }
     }
