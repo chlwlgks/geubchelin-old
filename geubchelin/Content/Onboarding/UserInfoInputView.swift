@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct UserInfoInputView: View {
-    @Environment(\.dismiss) private var dismiss
-    
     @AppStorage("showOnboardingView") private var showOnboardingView = true
     @AppStorage("schoolName") private var schoolName: String?
+    
+    @State private var allergySelectionViewModel = AllergySelectionViewModel()
     
     var body: some View {
         VStack {
@@ -20,41 +20,45 @@ struct UserInfoInputView: View {
                     NavigationLink {
                         SchoolSelectionView()
                     } label: {
-                        HStack {
-                            Text("학교 선택")
+                        LabeledContent("학교 선택") {
                             if let schoolName {
-                                Spacer()
                                 Text(schoolName)
-                                    .foregroundStyle(.gray)
-                                    .multilineTextAlignment(.trailing)
                             }
                         }
                     }
                 }
+                
                 Section {
                     NavigationLink {
                         AllergySelectionView()
+                            .environment(allergySelectionViewModel)
                     } label: {
-                        Text("알레르기 유발 식품 선택")
+                        LabeledContent("알레르기 유발 식품 선택") {
+                            if !allergySelectionViewModel.selectedAllergies.isEmpty {
+                                Text("\(allergySelectionViewModel.selectedAllergies.count)개")
+                            }
+                        }
                     }
                 }
             }
-            .scrollDisabled(true)
-            
-            Button {
-                showOnboardingView = false
-            } label: {
-                Text("완료")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, maxHeight: 35)
+            .adaptiveSafeAreaBottom {
+                Button {
+                    showOnboardingView = false
+                } label: {
+                    Text("완료")
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, maxHeight: 35)
+                }
+                .adaptiveProminentButtonStyle()
+                .disabled(schoolName == nil)
+                .padding(.horizontal)
+                .padding(.horizontal)
+                .padding(.horizontal)
+                .padding(.bottom)
             }
-            .disabled(schoolName == nil)
-            .buttonStyle(.borderedProminent)
-            .sensoryFeedback(.success, trigger: showOnboardingView)
-            .padding()
-            .padding(.bottom)
         }
         .navigationTitle("프로필 설정")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -7,42 +7,56 @@
 
 import SwiftUI
 
+enum AppTab: String, CaseIterable {
+    case home = "홈"
+    case mealPlan = "식단"
+//    case timetable = "시간표"
+    case more = "더보기"
+    
+    var systemImage: String {
+        switch self {
+        case .home: return "house"
+        case .mealPlan: return "calendar"
+//        case .timetable: return "clock"
+        case .more: return "ellipsis"
+        }
+    }
+    
+    @ViewBuilder var view: some View {
+        switch self {
+        case .home: HomeView()
+        case .mealPlan: CalendarView()
+//        case .timetable: EmptyView()
+        case .more: MoreView()
+        }
+    }
+}
+
 struct ContentView: View {
+    @State private var selection: AppTab? = .home
+    
     var body: some View {
-#if os(iOS)
         if #available(iOS 18, *) {
-            TabView {
-                Tab("홈", systemImage: "house") {
-                    HomeView()
-                }
-                Tab("식단", systemImage: "calendar") {
-                    MealPlanView()
-                }
-                Tab("더보기", systemImage: "ellipsis") {
-                    MoreView()
+            TabView(selection: $selection) {
+                ForEach(AppTab.allCases, id: \.self) { tab in
+                    Tab(tab.rawValue, systemImage: tab.systemImage, value: tab) {
+                        tab.view
+                    }
                 }
             }
+            .tabViewStyle(.sidebarAdaptable)
         } else {
-            TabView() {
-                HomeView()
-                    .tabItem {
-                        Image(systemName: "house")
-                        Text("홈")
-                    }
-                MealPlanView()
-                    .tabItem {
-                        Image("calendar")
-                        Text("식단")
-                    }
-                MoreView()
-                    .tabItem {
-                        Image("ellipsis")
-                        Text("더보기")
-                    }
+            TabView(selection: $selection) {
+                ForEach(AppTab.allCases, id: \.self) { tab in
+                    tab.view
+                        .tabItem {
+                            Image(systemName: tab.systemImage)
+                            Text(tab.rawValue)
+                        }
+                        .tag(tab)
+                }
             }
         }
-#else
-#endif
     }
 }
 
